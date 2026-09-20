@@ -1,7 +1,7 @@
 import json, os
 from http.server import BaseHTTPRequestHandler, HTTPServer
 PORT = int(os.environ.get("PORT") or os.environ.get("APP_PORT") or 8000)
-VERSION, BRANCH = "v1hook", "python"
+VERSION, BRANCH = "v1", "python"
 class H(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path in ("/", "/health"):
