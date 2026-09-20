@@ -1,11 +1,12 @@
 import json, os
 from http.server import BaseHTTPRequestHandler, HTTPServer
 PORT = int(os.environ.get("PORT") or os.environ.get("APP_PORT") or 8000)
-VERSION, BRANCH = "v1", "python"
+VERSION, BRANCH = "v2", "python-v2"
 class H(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path in ("/", "/health"):
-            body = {"status":"ok","runtime":"python","source":"github","version":VERSION,"branch":BRANCH,"env":os.environ.get("KUBIY_E2E_ENV")}
+            envs = {k: v for k, v in os.environ.items() if k.startswith("KUBIY_E2E")}
+            body = {"status":"ok","runtime":"python","source":"github","version":VERSION,"branch":BRANCH,"env":os.environ.get("KUBIY_E2E_ENV"),"envs":envs}
             b = json.dumps(body, separators=(",",":")).encode()
             self.send_response(200); self.send_header("Content-Type","application/json"); self.send_header("Content-Length",str(len(b))); self.end_headers(); self.wfile.write(b)
         else:
